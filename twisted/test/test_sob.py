@@ -5,9 +5,9 @@
 import sys, os
 
 try:
-    import Crypto.Cipher.AES
+    import cryptography
 except ImportError:
-    Crypto = None
+    cryptography = None
 
 from twisted.trial import unittest
 from twisted.persisted import sob
@@ -71,8 +71,8 @@ class PersistTestCase(unittest.TestCase):
                 p.save(filename='epersisttest.'+style, passphrase=phrase)
                 o1 = sob.load('epersisttest.'+style, style, phrase)
                 self.assertEqual(o, o1)
-    if Crypto is None:
-        testEncryptedStyles.skip = "PyCrypto required for encrypted config"
+    if cryptography is None:
+        testEncryptedStyles.skip = "cryptography required for encrypted config"
 
     def testPython(self):
         f = open("persisttest.python", 'w')
@@ -89,8 +89,8 @@ class PersistTestCase(unittest.TestCase):
         f.close()
         o = sob.loadValueFromFile('epersisttest.python', 'foo', phrase)
         self.assertEqual(o, [1,2,3])
-    if Crypto is None:
-        testEncryptedPython.skip = "PyCrypto required for encrypted config"
+    if cryptography is None:
+        testEncryptedPython.skip = "cryptography required for encrypted config"
 
     def testTypeGuesser(self):
         self.assertRaises(KeyError, sob.guessType, "file.blah")
